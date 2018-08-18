@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>blog-egg</title>
+  <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+</head>
+
+<body>
+  <nav class="navbar navbar-default">
+    <div class="container-fluid">
+      <!-- Brand and toggle get grouped for better mobile display -->
+      <div class="navbar-header">
+        <a class="navbar-brand">Blog</a>
+      </div>
+
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+          <li class="active">
+            <a href="/blog/list/1">博客</a>
+          </li>
+          <li>
+            <a href="/category/list">分类</a>
+          </li>
+          <li>
+            <a href="/user/login">我的</a>
+          </li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+          <li>
+            <a href="/blog/add">写博客</a>
+          </li>
+          <li class="dropdown">
+            <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">{{ctx.session.user.userName}} <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/user/logoutAction">登出</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </div>
+    <!-- /.container-fluid -->
+  </nav>
+  <ul class="list-group">
+    {% for item in list %}
+      <li class="list-group-item">
+        <a href="/blog/detail/{{item._id}}">{{item.title}}</a>
+        <a href="/blog/delete/{{item._id}}/{{currentPage}}" class="badge">删除</a>
+        <a href="/blog/edit/{{item._id}}/{{currentPage}}" class="badge">编辑</a>
+      </li>
+    {% endfor %}
+  </ul>
+
+  <nav aria-label="Page navigation">
+    <ul class="pagination">
+      <li>
+        <a href="/blog/list/{{(currentPage | float - 1 | float) if currentPage > 1 else 1}}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% for item in range(1, (totalPage + 1)) %}
+        <li class="{{'active' if item == currentPage else ''}}"><a href="/blog/list/{{item}}">{{item}}</a></li>
+      {% endfor %}
+      <li>
+        <a href="/blog/list/{{(currentPage | float + 1 | float) if currentPage < totalPage else totalPage}}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+</body>
+<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.bootcss.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</html>

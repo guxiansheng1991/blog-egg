@@ -8,3 +8,9 @@ exports.nunjucks = {
   enabled: true,
   package: 'egg-view-nunjucks',
 };
+
+// 配置MongoDB
+exports.mongoose = {
+  enabled: true,
+  package: 'egg-mongoose',
+};

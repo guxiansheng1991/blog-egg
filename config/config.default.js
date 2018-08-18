@@ -9,7 +9,12 @@ module.exports = appInfo => {
   config.keys = appInfo.name + '_1534300430738_2489';
 
   // add your config here
-  config.middleware = [];
+  config.middleware = [ 'authentication' ];
+  // config.middleware = [];
+
+  config.authentication = {
+    excepts: [ '/user/login' ],
+  };
 
   // view模板配置
   config.view = {
@@ -25,6 +30,19 @@ module.exports = appInfo => {
     defaultViewEngine: 'nunjucks',
     // 默认的view文件渲染后缀,配置此项可以在render函数中省略后缀名
     defaultExtension: '.nj',
+  };
+
+  // MongoDB配置
+  config.mongoose = {
+    client: {
+      url: 'mongodb://127.0.0.1/blogegg',
+      options: {},
+    },
+  };
+
+  // session设置
+  config.session = {
+    renew: true,
   };
 
   return config;
