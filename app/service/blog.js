@@ -41,14 +41,14 @@ class BlogService extends Service {
     return data;
   }
 
-  async add(title, content, categoryId) {
+  async add(title, content, category) {
     let res = null;
     const user = this.ctx.session.user;
     try {
       res = this.ctx.model.Blog.create({
         title,
         content,
-        categoryId,
+        category,
         userId: user._id,
       });
     } catch (error) {

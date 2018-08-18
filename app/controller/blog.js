@@ -17,14 +17,24 @@ class BlogController extends Controller {
       title: '',
       content: '',
       categoryId: '4',
+      categoryList: [],
     };
+    const categoryList = await this.ctx.service.category.list();
+    if (categoryList) {
+      data.categoryList = categoryList;
+    } else {
+      const data = {
+        msg: '获取类别列表失败, 请重试!',
+      };
+      await this.ctx.render('error', data);
+    }
     await this.ctx.render('blogAdd', data);
   }
 
   async addAction() {
     const title = this.ctx.request.body.title;
     const content = this.ctx.request.body.content;
-    const categoryId = this.ctx.request.body.categoryId;
+    const category = this.ctx.request.body.category;
     let msg = '';
     if (!title) {
       msg += 'title不能为空值, ';
@@ -32,11 +42,11 @@ class BlogController extends Controller {
     if (!content) {
       msg += 'content不能为空值, ';
     }
-    if (!categoryId) {
+    if (!category) {
       msg += 'category不能为空值, ';
     }
     if (!msg) {
-      const res = await this.ctx.service.blog.add(title, content, categoryId);
+      const res = await this.ctx.service.blog.add(title, content, category);
       if (res) {
         this.ctx.redirect('/blog/list/1');
       } else {
@@ -44,7 +54,7 @@ class BlogController extends Controller {
           msg: '新增失败, 请重试',
           title,
           content,
-          categoryId,
+          category,
         };
         await this.ctx.render('/blog/add', data);
       }
@@ -53,7 +63,7 @@ class BlogController extends Controller {
         message: msg,
         title,
         content,
-        categoryId,
+        category,
       };
       await this.ctx.render('/blog/add', data);
     }
@@ -66,7 +76,17 @@ class BlogController extends Controller {
     const data = {
       msg: '',
       data: res,
+      categoryList: [],
     };
+    const categoryList = await this.ctx.service.category.list();
+    if (categoryList) {
+      data.categoryList = categoryList;
+    } else {
+      const data = {
+        msg: '获取类别列表失败, 请重试!',
+      };
+      await this.ctx.render('error', data);
+    }
     await this.ctx.render('blogEdit', data);
   }
   async editAction() {
@@ -75,6 +95,7 @@ class BlogController extends Controller {
     const update = {
       title: this.ctx.request.body.title,
       content: this.ctx.request.body.content,
+      category: this.ctx.request.body.category,
     };
     const res = await this.ctx.service.blog.editAction(id, update);
     if (res) {
@@ -94,10 +115,24 @@ class BlogController extends Controller {
   async detail() {
     const id = this.ctx.params.id;
     const res = await this.ctx.service.blog.findOne(id);
+    let category = null;
+    const errorData = {
+      msg: '',
+    };
+    if (res || res.category) {
+      category = await this.ctx.service.category.findOne(res.category);
+    } else {
+      errorData.msg = '获取该博客信息失败,请重试!';
+      await this.ctx.render('error', errorData);
+    }
     const data = {
       msg: '',
       data: res,
+      categoryName: '',
     };
+    if (category) {
+      data.categoryName = category.name;
+    }
     await this.ctx.render('blogDetail', data);
   }
 }

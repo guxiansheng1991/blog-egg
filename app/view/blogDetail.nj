@@ -56,7 +56,7 @@
 
   <div class="panel panel-default">
     <div class="panel-heading">
-      <p><span style="font-size: 30px;">{{data.title}}</span><span class="pull-right">{{data.category}}</span></p>
+      <p><span style="font-size: 30px;">{{data.title}}</span><span class="pull-right">{{categoryName}}</span></p>
     </div>
     <div class="panel-body">
       {{data.content}}
