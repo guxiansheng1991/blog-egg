@@ -5,7 +5,7 @@ const Controller = require('egg').Controller;
 
 class BlogController extends Controller {
   async list() {
-    const page = this.ctx.params.page;
+    const page = this.ctx.params.page ? this.ctx.params.page : 1;
     const pageSize = 10;
     const res = await this.ctx.service.blog.list(page, pageSize);
     await this.ctx.render('blogs', res);
