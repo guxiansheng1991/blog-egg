@@ -13,7 +13,7 @@ module.exports = appInfo => {
   // config.middleware = [];
 
   config.authentication = {
-    excepts: [ '/user/login' ],
+    excepts: [ '/user/login', '/user/register' ],
   };
 
   // view模板配置
